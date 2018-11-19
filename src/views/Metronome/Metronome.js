@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Sound from 'react-sound';
 import './Metronome.scss';
 
@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import TickSound from './Tracks/tick.flac';
 import TickSoundUp from './Tracks/tickUp.flac';
 
-class Metronome extends React.Component {
+class Metronome extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,16 +18,15 @@ class Metronome extends React.Component {
             bpm: 120,
             isPlaying: false,
             playStatus: 'STOPPED',
-            tickSound: TickSound
+            tickSound: TickSoundUp
         };
-        this.play = this.play.bind(this);
-        this.tick = this.tick.bind(this);
-        this.changeBPMInput = this.changeBPMInput.bind(this);
-        this.changeBPMButton = this.changeBPMButton.bind(this);
-
     }
 
-    tick(){
+    componentWillUnmount = () => {
+        this.setState({isPlaying: false});
+    };
+
+    tick = () => {
         let newStates = {};
         let tickNumber = this.state.tickNumber + 1;
         if(tickNumber > 4){
@@ -51,9 +50,9 @@ class Metronome extends React.Component {
         }
 
         this.setState(newStates);
-    }
+    };
 
-    setTick(){
+    setTick = () => {
         console.log(this.state.isPlaying);
         clearInterval(this.timerID);
         if(this.state.isPlaying){
@@ -64,9 +63,9 @@ class Metronome extends React.Component {
                 );
             }
         }
-    }
+    };
 
-    play(){
+    play = () => {
         let isPlaying = !this.state.isPlaying;
         let playStatus = isPlaying ? 'PLAYING' : 'STOPPED';
         console.log('Play Button Pressed');
@@ -76,14 +75,19 @@ class Metronome extends React.Component {
             playStatus: playStatus
 
         },this.setTick);
-    }
+    };
 
-    changeBPMInput(event){
+    changeBPMInput = event => {
         console.log('BPM changed: ' + event.target.value);
-        this.setState({bpm: event.target.value},this.setTick);
-    }
+        let newValue = parseInt(event.target.value.replace(/[^\\d]/,''));
+        console.log(newValue,event.target.value.replace(/[^\d]/,''));
+        if(newValue < 0 || newValue === 'NaN'){
+            newValue = 0;
+        }
+        this.setState({bpm: newValue},this.setTick);
+    };
 
-    changeBPMButton(event){
+    changeBPMButton = event => {
         let value = parseInt(event.currentTarget.getAttribute('value'));
         let absolute = Math.abs(value);
         let currentValue = this.state.bpm;
@@ -110,22 +114,21 @@ class Metronome extends React.Component {
             bpm: newBPM
         },this.setTick);
 
-    }
+    };
 
-    render() {
+    render = () => {
         return (
             <div>
-
                 <Button variant="contained" color="primary" onClick={this.changeBPMButton} value={"-5"}>-5</Button>
                 <div className="tickNubmer up">{this.state.tickNumber}</div>
                 <Button variant="contained" color="primary" onClick={this.changeBPMButton} value={"5"}>+5</Button>
 
                 <input className={"bpm"} onChange={this.changeBPMInput} value={this.state.bpm}/>
 
-                <Sound url={this.state.tickSound} playStatus={this.state.playStatus} autoLoad />
-                <Button variant="contained" color="primary" onClick={this.play}>Play</Button>
+                <Sound url={this.state.tickSound} playStatus={this.state.playStatus} autoLoad ignoreMobileRestrictions />
+                <Button variant="contained" color="primary" onClick={this.play}>{this.state.isPlaying ? 'Stop' : 'Start'}</Button>
             </div>
         );
-    }
+    };
 }
 export default Metronome;

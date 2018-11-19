@@ -14,7 +14,7 @@ import Error from './views/Error/Error';
 
 
 
-class App extends React.Component {
+class App extends Component {
     render() {
         return (
             <BrowserRouter>
