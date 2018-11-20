@@ -4,6 +4,7 @@ import './Metronome.scss';
 
 
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
 import TickSound from './Tracks/tick.flac';
 import TickSoundUp from './Tracks/tickUp.flac';
@@ -118,16 +119,18 @@ class Metronome extends Component {
 
     render = () => {
         return (
-            <div>
-                <Button variant="contained" color="primary" onClick={this.changeBPMButton} value={"-5"}>-5</Button>
-                <div className="tickNubmer up">{this.state.tickNumber}</div>
-                <Button variant="contained" color="primary" onClick={this.changeBPMButton} value={"5"}>+5</Button>
+            <Grid container justify="center" alignItems="center" xs={12}>
+                <Grid item xs={6}>
+                    <Button variant="contained" color="primary" onClick={this.changeBPMButton} value={-5}>-5</Button>
+                    <div className="tickNumber up">{this.state.tickNumber}</div>
+                    <Button variant="contained" color="primary" onClick={this.changeBPMButton} value={5}>+5</Button>
 
-                <input className={"bpm"} onChange={this.changeBPMInput} value={this.state.bpm}/>
+                    <input className={"bpm"} onChange={this.changeBPMInput} value={this.state.bpm}/>
 
-                <Sound url={this.state.tickSound} playStatus={this.state.playStatus} autoLoad ignoreMobileRestrictions />
-                <Button variant="contained" color="primary" onClick={this.play}>{this.state.isPlaying ? 'Stop' : 'Start'}</Button>
-            </div>
+                    <Sound url={this.state.tickSound} playStatus={this.state.playStatus} autoLoad ignoreMobileRestrictions />
+                    <Button variant="contained" color="primary" onClick={this.play}>{this.state.isPlaying ? 'Stop' : 'Start'}</Button>
+                </Grid>
+            </Grid>
         );
     };
 }
