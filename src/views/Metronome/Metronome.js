@@ -3,11 +3,15 @@ import Sound from 'react-sound';
 import './Metronome.scss';
 
 
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import Paper from "@material-ui/core/Paper";
+import TextField from "@material-ui/core/TextField";
+import Slider from '@material-ui/lab/Slider';
 
 import TickSound from './Tracks/tick.flac';
 import TickSoundUp from './Tracks/tickUp.flac';
+
+import MetronomeButton from '../../components/Metronome/Button';
 
 class Metronome extends Component {
     constructor(props) {
@@ -88,6 +92,10 @@ class Metronome extends Component {
         this.setState({bpm: newValue},this.setTick);
     };
 
+    changeBPMSlider = (event, value) => {
+        this.setState({bpm: value},this.setTick);
+    };
+
     changeBPMButton = event => {
         let value = parseInt(event.currentTarget.getAttribute('value'));
         let absolute = Math.abs(value);
@@ -119,19 +127,78 @@ class Metronome extends Component {
 
     render = () => {
         return (
-            <Grid container justify="center" alignItems="center" xs={12}>
-                <Grid item xs={6}>
-                    <Button variant="contained" color="primary" onClick={this.changeBPMButton} value={-5}>-5</Button>
-                    <div className="tickNumber up">{this.state.tickNumber}</div>
-                    <Button variant="contained" color="primary" onClick={this.changeBPMButton} value={5}>+5</Button>
+            <Grid container justify="center" alignItems="center">
+                <Grid item xs={12} md={6}>
+                    <Grid container spacing={8}>
+                        <Grid item xs={2}>
+                            <Grid container justify={"center"} spacing={8}>
+                                <Grid item xs={12}>
+                                    <MetronomeButton text={"-1"}
+                                                     value={-1}
+                                                     onClick={this.changeBPMButton}
+                                                     fullWidth={true}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <MetronomeButton text={"-5"}
+                                                     value={-5}
+                                                     onClick={this.changeBPMButton}
+                                                     fullWidth={true}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={8}>
+                            <TextField
+                                id="outlined-bare"
+                                value={this.state.bpm}
+                                margin="normal"
+                                variant="outlined"
+                                fullWidth
+                                label="Beat per minute"
 
-                    <input className={"bpm"} onChange={this.changeBPMInput} value={this.state.bpm}/>
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <Grid container justify={"center"} spacing={8}>
+                                <Grid item xs={12}>
+                                    <MetronomeButton text={"+1"}
+                                                     value={1}
+                                                     onClick={this.changeBPMButton}
+                                                     fullWidth={true}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <MetronomeButton text={"+5"}
+                                                     value={5}
+                                                     onClick={this.changeBPMButton}
+                                                     fullWidth={true}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    {/*
+                    <br /><br />
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <div>
 
-                    <Sound url={this.state.tickSound} playStatus={this.state.playStatus} autoLoad ignoreMobileRestrictions />
-                    <Button variant="contained" color="primary" onClick={this.play}>{this.state.isPlaying ? 'Stop' : 'Start'}</Button>
+                                <Slider
+                                    value={this.state.bpm}
+                                    aria-labelledby="label"
+                                    min={20}
+                                    max={220}
+                                    step={1}
+                                    onChange={this.changeBPMSlider} />
+                            </div>
+                        </Grid>
+                    </Grid>
+                    */}
                 </Grid>
             </Grid>
         );
     };
 }
+
 export default Metronome;

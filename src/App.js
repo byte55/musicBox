@@ -10,6 +10,8 @@ import 'typeface-roboto';
 import './App.css';
 import NavBar from './components/NavBar/NavBar';
 
+import Grid from '@material-ui/core/Grid';
+
 // Views
 import Home from './views/Home/Home';
 import Metronome from './views/Metronome/Metronome';
@@ -22,11 +24,15 @@ class App extends Component {
                 <div>
                     <CssBaseline/>
                     <NavBar/>
-                    <Switch>
-                        <Route path="/" component={Home} exact />
-                        <Route path="/matronome" component={Metronome} />
-                        <Route component={Error} />
-                    </Switch>
+                    <Grid container xs={12} spacing={8}>
+                        <Grid item xs={12}>
+                            <Switch>
+                                <Route path="/" component={Home} exact />
+                                <Route path="/metronome" component={Metronome} />
+                                <Route component={Error} />
+                            </Switch>
+                        </Grid>
+                    </Grid>
                 </div>
             </BrowserRouter>
         );
