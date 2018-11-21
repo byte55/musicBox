@@ -12,8 +12,8 @@ const NavBar = () => {
                 <Typography variant={"title"} color={"inherit"}>
                     Musician Toolbox
                     &nbsp;&nbsp;&nbsp;
-                    <a href="/">Home</a>&nbsp;&nbsp;
-                    <a href="/metronome">Metronome</a>
+                    <a href={"/"}>Home</a>&nbsp;&nbsp;
+                    <a href={"/metronome"}>Metronome</a>
                 </Typography>
             </Toolbar>
         </AppBar>

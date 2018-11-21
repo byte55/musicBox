@@ -10,6 +10,7 @@ import Slider from '@material-ui/lab/Slider';
 
 import TickSound from './Tracks/tick.flac';
 import TickSoundUp from './Tracks/tickUp.flac';
+import TickNumber from './../../components/Metronome/TickNumber/TickNumber';
 
 import MetronomeButton from '../../components/Metronome/Button';
 
@@ -22,9 +23,12 @@ class Metronome extends Component {
             maxTickNumber: 4,
             bpm: 120,
             isPlaying: false,
+            isTickNumberUp: true,
             playStatus: 'STOPPED',
-            tickSound: TickSoundUp
         };
+
+        this.tickSound = new Audio(TickSound);
+        this.tickSoundUp = new Audio(TickSoundUp);
     }
 
     componentWillUnmount = () => {
@@ -32,29 +36,20 @@ class Metronome extends Component {
     };
 
     tick = () => {
-        let newStates = {};
         let tickNumber = this.state.tickNumber + 1;
         if(tickNumber > 4){
             tickNumber = 1;
         }
 
         if(this.state.tickUpNumbers.indexOf(tickNumber) >= 0){
-            newStates = {
-                tickNumber: tickNumber,
-                tickSound: TickSoundUp
-            }
+            this.tickSoundUp.play();
+            this.setState({isTickNumberUp: true});
         } else {
-            newStates = {
-                tickNumber: tickNumber,
-                tickSound: TickSound
-            }
+            this.tickSound.play();
+            this.setState({isTickNumberUp: false});
         }
 
-        if(newStates.tickSound === this.state.tickSound){
-            delete newStates.tickSound;
-        }
-
-        this.setState(newStates);
+        this.setState({tickNumber: tickNumber});
     };
 
     setTick = () => {
@@ -72,12 +67,11 @@ class Metronome extends Component {
 
     play = () => {
         let isPlaying = !this.state.isPlaying;
-        let playStatus = isPlaying ? 'PLAYING' : 'STOPPED';
         console.log('Play Button Pressed');
         console.log(isPlaying);
         this.setState({
             isPlaying: isPlaying,
-            playStatus: playStatus
+            tickNumber: 1
 
         },this.setTick);
     };
@@ -130,6 +124,9 @@ class Metronome extends Component {
             <Grid container justify="center" alignItems="center">
                 <Grid item xs={12} md={6}>
                     <Grid container spacing={8}>
+                        <Grid item xs={12} >
+                            <TickNumber isTickNumberUp={this.state.isTickNumberUp} tickNumber={this.state.tickNumber}/>
+                        </Grid>
                         <Grid item xs={2}>
                             <Grid container justify={"center"} spacing={8}>
                                 <Grid item xs={12}>
@@ -155,8 +152,7 @@ class Metronome extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 fullWidth
-                                label="Beat per minute"
-
+                                label="beats per minute"
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -176,6 +172,14 @@ class Metronome extends Component {
                                     />
                                 </Grid>
                             </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <MetronomeButton text={this.state.isPlaying ? 'Stop' : 'Start'}
+                                             onClick={this.play}
+                                             fullWidth={true}
+                            />
                         </Grid>
                     </Grid>
                     {/*
