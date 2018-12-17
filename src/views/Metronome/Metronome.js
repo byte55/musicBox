@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import Sound from 'react-sound';
+//import Sound from 'react-sound';
 import './Metronome.scss';
 
 
 import Grid from '@material-ui/core/Grid';
-import Paper from "@material-ui/core/Paper";
+//import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
-import Slider from '@material-ui/lab/Slider';
+//import Slider from '@material-ui/lab/Slider';
 
 import TickSound from './Tracks/tick.flac';
 import TickSoundUp from './Tracks/tickUp.flac';
@@ -21,11 +21,12 @@ class Metronome extends Component {
             tickNumber: 1,
             tickUpNumbers: [1],
             maxTickNumber: 4,
-            bpm: 120,
+            bpm: localStorage.getItem('bpm') || 120,
             isPlaying: false,
             isTickNumberUp: true,
             playStatus: 'STOPPED',
         };
+        console.log('storage BPM',localStorage.getItem('bpm'));
 
         this.tickSound = new Audio(TickSound);
         this.tickSoundUp = new Audio(TickSoundUp);
@@ -33,6 +34,8 @@ class Metronome extends Component {
 
     componentWillUnmount = () => {
         this.setState({isPlaying: false});
+        localStorage.setItem('bpm',this.state.bpm);
+
     };
 
     tick = () => {
@@ -84,10 +87,12 @@ class Metronome extends Component {
             newValue = 0;
         }
         this.setState({bpm: newValue},this.setTick);
+        localStorage.setItem('bpm',newValue);
     };
 
     changeBPMSlider = (event, value) => {
         this.setState({bpm: value},this.setTick);
+        localStorage.setItem('bpm',value);
     };
 
     changeBPMButton = event => {
@@ -116,6 +121,7 @@ class Metronome extends Component {
         this.setState({
             bpm: newBPM
         },this.setTick);
+        localStorage.setItem('bpm',newBPM);
 
     };
 

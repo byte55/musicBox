@@ -24,7 +24,7 @@ class App extends Component {
                 <div>
                     <CssBaseline/>
                     <NavBar/>
-                    <Grid container xs={12} spacing={8}>
+                    <Grid container>
                         <Grid item xs={12}>
                             <Switch>
                                 <Route path="/" component={Home} exact />
