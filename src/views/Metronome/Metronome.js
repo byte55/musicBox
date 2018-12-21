@@ -79,20 +79,24 @@ class Metronome extends Component {
         },this.setTick);
     };
 
+    handleBPMChange = (bpm) => {
+        bpm = parseInt(bpm);
+        this.setState({bpm: bpm},this.setTick);
+        localStorage.setItem('bpm',bpm);
+    };
+
     changeBPMInput = event => {
         console.log('BPM changed: ' + event.target.value);
-        let newValue = parseInt(event.target.value.replace(/[^\\d]/,''));
-        console.log(newValue,event.target.value.replace(/[^\d]/,''));
-        if(newValue < 0 || newValue === 'NaN'){
-            newValue = 0;
+        let newBPM = parseInt(event.target.value.replace(/[^\\d]/,''));
+        console.log(newBPM,event.target.value.replace(/[^\d]/,''));
+        if(newBPM < 0 || newBPM === 'NaN'){
+            newBPM = 0;
         }
-        this.setState({bpm: newValue},this.setTick);
-        localStorage.setItem('bpm',newValue);
+        this.handleBPMChange(newBPM);
     };
 
     changeBPMSlider = (event, value) => {
-        this.setState({bpm: value},this.setTick);
-        localStorage.setItem('bpm',value);
+        this.handleBPMChange(value);
     };
 
     changeBPMButton = event => {
@@ -117,12 +121,7 @@ class Metronome extends Component {
         }
 
         console.log(newBPM,currentValue,absolute);
-
-        this.setState({
-            bpm: newBPM
-        },this.setTick);
-        localStorage.setItem('bpm',newBPM);
-
+        this.handleBPMChange(newBPM);
     };
 
     render = () => {
