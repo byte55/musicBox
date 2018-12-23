@@ -30,6 +30,7 @@ class Metronome extends Component {
 
         this.tickSound = new Audio(TickSound);
         this.tickSoundUp = new Audio(TickSoundUp);
+        this.lastBpmDetermineClick = 0;
     }
 
     componentWillUnmount = () => {
@@ -124,6 +125,20 @@ class Metronome extends Component {
         this.handleBPMChange(newBPM);
     };
 
+    determineBPM = () => {
+        let d = new Date();
+        let clickTime = d.getTime();
+        let differcene = clickTime - this.lastBpmDetermineClick;
+        let newBPM = Math.floor(60000 / differcene);
+        if(newBPM > 0) {
+            if(this.state.isPlaying){
+                this.play();
+            }
+            this.handleBPMChange(newBPM);
+        }
+        this.lastBpmDetermineClick = clickTime;
+    };
+
     render = () => {
         return (
             <Grid container justify="center" alignItems="center">
@@ -187,6 +202,16 @@ class Metronome extends Component {
                             />
                         </Grid>
                     </Grid>
+
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <MetronomeButton text={"Determine BPM"}
+                                             onClick={this.determineBPM}
+                                             fullWidth={true}
+                            />
+                        </Grid>
+                    </Grid>
+
                     {/*
                     <br /><br />
                     <Grid container>
